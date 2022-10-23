@@ -11,6 +11,8 @@ RoxygenNote: 7.2.1
 URL: https://github.com/mattroumaya/phillymetaldata
 BugReports: https://github.com/mattroumaya/phillymetaldata/issues
 Imports:
-  dplyr,
-  httr,
-  purrr
+    dplyr,
+    httr,
+    magrittr,
+    rlang,
+    purrr

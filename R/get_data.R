@@ -15,7 +15,8 @@
 #'
 #' @importFrom httr GET add_headers content
 #' @importFrom purrr map_df
-#' @importFrom dplyr select filter
+#' @importFrom dplyr select filter mutate
+#' @importFrom rlang .data
 #'
 #' @export
 get_data <- function(upcoming_shows_only = FALSE) {
@@ -29,13 +30,14 @@ get_data <- function(upcoming_shows_only = FALSE) {
                         Authorization = token)
     )
 
-  parsed_data <- httr::content(data, as = "parsed") |>
-    purrr::map_df( ~ .x) |>
+  parsed_data <- httr::content(data, as = "parsed") %>%
+    purrr::map_df( ~ .x) %>%
     dplyr::select(-"i_went_to_this_show")
 
   if (upcoming_shows_only) {
-    parsed_data <- parsed_data |>
-      filter("show_date" >= Sys.Date())
+    parsed_data <- parsed_data %>%
+      mutate(show_date = as.Date(.data$show_date)) %>%
+      filter(.data$show_date >= Sys.Date())
   }
 
   return(parsed_data)
